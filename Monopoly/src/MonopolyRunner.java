@@ -1047,7 +1047,7 @@ public class MonopolyRunner
 			else 
 				{
 				player.get(1).setAmountOfMoney(player.get(1).getAmountOfMoney() - badOutcome);
-				System.out.println("You have paid the bail of " + badOutcome + ". You now have " + player.get(1).getAmountOfMoney());
+				System.out.println("You have paid the fee of " + badOutcome + ". You now have " + player.get(1).getAmountOfMoney());
 				playGame1();
 				}
 			}
