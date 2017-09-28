@@ -1027,6 +1027,7 @@ public class MonopolyRunner
 						counter ++;
 						}
 					}
+				//haha
 				if (counter == 0)
 					{
 					System.out.println("Darn. You're officially broke...Good job " + player.get(0).getName() + "! You win!!!");
