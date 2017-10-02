@@ -375,6 +375,7 @@ public class MonopolyRunner
 				System.out.println("Sorry man, you don't have the money...");
 				playGame2();
 				}
+			//hi
 			else 
 				{
 				System.out.println("Well in that case its still free to stay here...for now!");
