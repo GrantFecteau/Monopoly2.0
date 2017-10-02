@@ -4,11 +4,22 @@ public class MonopolyRunner
 	{
 	static ArrayList <boardSpaces> board = new ArrayList <boardSpaces>();
 	static ArrayList <Player> player = new ArrayList <Player>();
+	static ArrayList <Peice> boardPiece = new ArrayList <Peice>();
 	public static void main(String[] args)
 		{
 		boardSetUp();
+		peiceSetUp();
 		playerSetUp();
 		playGame1();
+		}
+	private static void peiceSetUp()
+		{
+		boardPiece.add(new Peice ("Doggo", 1200));
+		boardPiece.add(new Peice ("Top Hat", 1600));
+		boardPiece.add(new Peice ("Thimble", 1200));
+		boardPiece.add(new Peice ("Car", 1200));
+		boardPiece.add(new Peice ("Boot", 1000));
+		boardPiece.add(new Peice ("Wheelbarrow", 1200));
 		}
 	private static void boardSetUp()
 		{
@@ -58,7 +69,16 @@ public class MonopolyRunner
 			System.out.println("What is your name?");
 			Scanner userInput = new Scanner (System.in);
 			String name = userInput.nextLine();
-			player.add(new Player (name, "Player" + (i + 1), 1200, 0, 0));
+			System.out.println("Which piece would you like to play as today?");
+			int counter = 1;
+			for (Peice p: boardPiece)
+				{
+				System.out.println(counter + "). " + p.getType());
+				counter++;
+				}
+			Scanner userInput1 = new Scanner (System.in);
+			int selection = userInput1.nextInt();
+			player.add(new Player (name, "Player" + (i + 1), boardPiece.get(selection -1).getStartingValue(), 0, 0));
 			}
 		}
 	private static void playGame1()
