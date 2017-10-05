@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 public class MonopolyRunner
 	{
 	static ArrayList <boardSpaces> board = new ArrayList <boardSpaces>();
@@ -10,7 +11,11 @@ public class MonopolyRunner
 		boardSetUp();
 		peiceSetUp();
 		playerSetUp();
-		playGame1();
+		while (brokeAsCrap(0,1)&&brokeAsCrap(1,0))
+		{
+		playGame(0);
+		playGame(1);
+		}
 		}
 	private static void peiceSetUp()
 		{
@@ -24,7 +29,7 @@ public class MonopolyRunner
 	private static void boardSetUp()
 		{
 		board.add(new boardSpaces ("Go. Collect 200", "Unsellable", " ", " ", 200, 0, 0, 0, 0, 0));
-		board.add(new boardSpaces ("Shitty Back Alley Lane", "None", " ", " ", 60, 30, 0, 10, 0, 20));
+		board.add(new boardSpaces ("Crappy Back Alley Lane", "None", " ", " ", 60, 30, 0, 10, 0, 20));
 		board.add(new boardSpaces ("Chance", "Unsellable", " ", " ", 0, 0, 0, 0, 0, 0));
 		board.add(new boardSpaces ("Balsamic VineAvenue", "None", " ", " ", 60, 30, 0, 10, 0, 20));
 		board.add(new boardSpaces ("Income Tax", "Unsellable", "X", "X", 0, 200, 0, 0, 0, 0));
@@ -66,7 +71,8 @@ public class MonopolyRunner
 		{
 		for (int i = 0; i < 2; i ++)
 			{
-			System.out.println("What is your name?");
+			int playernum = i+1;
+			System.out.println("Hello Player "+playernum+", what is your name?");
 			Scanner userInput = new Scanner (System.in);
 			String name = userInput.nextLine();
 			System.out.println("Which piece would you like to play as today?");
@@ -79,157 +85,172 @@ public class MonopolyRunner
 			Scanner userInput1 = new Scanner (System.in);
 			int selection = userInput1.nextInt();
 			player.add(new Player (name, "Player" + (i + 1), boardPiece.get(selection -1).getStartingValue(), 0, 0));
+			boardPiece.remove(selection-1);
+			System.out.println("Processing");
+			for (int o = 0; o<3; o++)
+			{	
+			try {
+				TimeUnit.SECONDS.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println(".");
+			}
+			System.out.println("Ding!");
 			}
 		}
-	private static void playGame1()
+	private static void playGame(int a)
 		{
-		int dice = (int) (Math.random() * 6) + 1;
-		if (player.get(0).getPosition() + dice > 37)
+		int dice = rollDice();
+		if (player.get(a).getPosition() + dice > 37)
 			{
-			player.get(0).setPosition((player.get(0).getPosition() + dice) - 37);
-			System.out.println(player.get(0).getName() + " you have rolled a " + dice + ". That means you have landed on " + board.get(player.get(0).getPosition()).getPropertyName());
+			player.get(a).setPosition((player.get(a).getPosition() + dice) - 37);
+			System.out.println(player.get(a).getName() + " you have rolled a " + dice + ". That means you have landed on " + board.get(player.get(a).getPosition()).getPropertyName());
 			collect2001();
 			}
 		else
 			{
-			player.get(0).setPosition(player.get(0).getPosition() + dice);
-			System.out.println(player.get(0).getName() + " you have rolled a " + dice + ". That means you have landed on " + board.get(player.get(0).getPosition()).getPropertyName());
+			player.get(a).setPosition(player.get(a).getPosition() + dice);
+			System.out.println(player.get(a).getName() + " you have rolled a " + dice + ". That means you have landed on " + board.get(player.get(a).getPosition()).getPropertyName());
 			}
-		if (board.get(player.get(0).getPosition()).equals(0))
+		if (board.get(player.get(a).getPosition()).equals(0))
 			{
 			System.out.println("You're on Go. Nothing else happens here...");
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().equals("Chance"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().equals("Chance"))
 			{
-			drawAChanceCard1();
+			drawAChanceCard1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().equals("YOU DONE GOT CAUGHT MY DEWD"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().equals("YOU DONE GOT CAUGHT MY DEWD"))
 			{
-			jailTime1();
+			jailTime1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().equals("Stringy Old Scrooge Parking!!!"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().equals("Stringy Old Scrooge Parking!!!"))
 			{
-			freeParking1();
+			freeParking1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().equals("Visiting Jail Yo"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().equals("Visiting Jail Yo"))
 			{
-			visitingJail1();
+			visitingJail1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().contains("Choo-Choo"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().contains("Choo-Choo"))
 			{
-			joinTheRailRoad1();
+			joinTheRailRoad1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().contains("Utilities"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().contains("Utilities"))
 			{
-			utilityCompany1();
+			utilityCompany1(a);
 			}
-		else if (board.get(player.get(0).getPosition()).getPropertyName().contains("Tax"))
+		else if (board.get(player.get(a).getPosition()).getPropertyName().contains("Tax"))
 			{
-			taxThemAHoles1();
+			taxThemAHoles1(a);
 			}
 		else
 			{
-			propertyManagement1();
+			propertyManagement1(a);
 			}
 		}
-	private static void brokeAsCrap1()
+	private static boolean brokeAsCrap(int p, int b)
 		{
-		if (player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())) < 0 && player.get(0).getNumberOfProperties() == 0)
+		if (player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())) < 0 && player.get(p).getNumberOfProperties() == 0)
 			{
 			System.out.println("Darn. You're officially broke...Good job " + player.get(1).getName() + "! You win!!!");
-			System.exit(0);
+			return false;
 			}
-		else if (player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())) < 0 && player.get(0).getNumberOfProperties() > 0)
+		else if (player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())) < 0 && player.get(p).getNumberOfProperties() > 0)
 			{
 			System.out.println("Uh oh! Looks like you have no money...you'll have to sell one of these to get by...");
 			int counter = 1;
 			int counter2 = 0;
-			for (boardSpaces b: board)
+			for (boardSpaces bd: board)
 				{
-				if (b.getOwnership().equals(player.get(0).getPlayerDesignation()) && (player.get(0).getAmountOfMoney() + (b.getPurchaseValue()/2)) - board.get(player.get(0).getPosition()).getStayValue() > -1)
+				if (bd.getOwnership().equals(player.get(p).getPlayerDesignation()) && (player.get(p).getAmountOfMoney() + (bd.getPurchaseValue()/2)) - board.get(player.get(p).getPosition()).getStayValue() > -1)
 					{
-					System.out.println("Space " + (counter) + ": " + b.getPropertyName() + " - " + (b.getPurchaseValue() / 2));
+					System.out.println("Space " + (counter) + ": " + bd.getPropertyName() + " - " + (bd.getPurchaseValue() / 2));
 					counter2++;
 					}
 				counter++;
 				}
 			if (counter2 == 0)
 				{
-				System.out.println("Darn. You're officially broke...Good job " + player.get(1).getName() + "! You win!!!");
-				System.exit(0);
+				System.out.println("Darn. You're officially broke...Good job " + player.get(b).getName() + "! You win!!!");
+				return false;
 				}
 			else
 				{
 				Scanner userInput = new Scanner (System.in);
 				int decision = userInput.nextInt();
-				player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() + (board.get(decision-1).getPurchaseValue() / 2));
-				System.out.println("Decided to sell " + board.get(decision - 1).getPropertyName() + ". You now have " + player.get(0).getAmountOfMoney());
+				player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() + (board.get(decision-1).getPurchaseValue() / 2));
+				System.out.println("Decided to sell " + board.get(decision - 1).getPropertyName() + ". You now have " + player.get(p).getAmountOfMoney());
 				board.get(decision - 1).setOwnership("None");
 				board.get(decision -1).setNumberOfHotels(0);
 				board.get(decision - 1).setNumberOfHouses(0);
-				player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())));
-				player.get(1).setAmountOfMoney(player.get(1).getAmountOfMoney() + (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())));
-				System.out.println("You have paid the fee of " + (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())) + ". You now have " + player.get(0).getAmountOfMoney());
-				playGame2();
+				player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())));
+				player.get(b).setAmountOfMoney(player.get(b).getAmountOfMoney() + (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())));
+				System.out.println("You have paid the fee of " + (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())) + ". You now have " + player.get(p).getAmountOfMoney());
+				return true;
 				}
 			}
 		else 
 			{
-			player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())));
-			player.get(1).setAmountOfMoney(player.get(1).getAmountOfMoney() + (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())));
-			System.out.println("You have paid the fee of " + (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())) + ". You now have " + player.get(0).getAmountOfMoney());
-			playGame2();
+			player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())));
+			player.get(b).setAmountOfMoney(player.get(b).getAmountOfMoney() + (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())));
+			System.out.println("You have paid the fee of " + (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())) + ". You now have " + player.get(p).getAmountOfMoney());
+			return true;
 			}
 		}
-	private static void giveGov1()
+	
+	
+	private static void giveGov1(int p, int b)
 		{
-		if (player.get(0).getAmountOfMoney() - board.get(player.get(0).getPosition()).getStayValue() < 0 && player.get(0).getNumberOfProperties() == 0)
+		if (player.get(p).getAmountOfMoney() - board.get(player.get(p).getPosition()).getStayValue() < 0 && player.get(p).getNumberOfProperties() == 0)
 			{
-			System.out.println("Darn. You're officially broke...Good job " + player.get(1).getName() + "! You win!!!");
+			System.out.println("Darn. You're officially broke...Good job " + player.get(b).getName() + "! You win!!!");
 			System.exit(0);
 			}
-		else if (player.get(0).getAmountOfMoney() - board.get(player.get(0).getPosition()).getStayValue() < 0 && player.get(0).getNumberOfProperties() > 0)
+		else if (player.get(p).getAmountOfMoney() - board.get(player.get(p).getPosition()).getStayValue() < 0 && player.get(p).getNumberOfProperties() > 0)
 			{
 			System.out.println("Uh oh! Looks like you have no money...you'll have to sell one of these to get by...");
 			int counter = 1;
 			int counter2 = 0;
-			for (boardSpaces b: board)
+			for (boardSpaces bd: board)
 				{
-				if (b.getOwnership().equals(player.get(0).getPlayerDesignation()) && (player.get(0).getAmountOfMoney() + (b.getPurchaseValue()/2)) - board.get(player.get(0).getPosition()).getStayValue() > -1)
+				if (bd.getOwnership().equals(player.get(p).getPlayerDesignation()) && (player.get(p).getAmountOfMoney() + (bd.getPurchaseValue()/2)) - board.get(player.get(p).getPosition()).getStayValue() > -1)
 					{
-					System.out.println("Space " + (counter) + ": " + b.getPropertyName() + " - " + (b.getPurchaseValue() / 2));
+					System.out.println("Space " + (counter) + ": " + bd.getPropertyName() + " - " + (bd.getPurchaseValue() / 2));
 					counter2 ++;
 					}
 				counter ++;
 				}
 			if (counter2 == 0)
 				{
-				System.out.println("Darn. You're officially broke...Good job " + player.get(1).getName() + "! You win!!!");
+				System.out.println("Darn. You're officially broke...Good job " + player.get(b).getName() + "! You win!!!");
 				System.exit(0);
 				}
 			else
 				{
 				Scanner userInput = new Scanner (System.in);
 				int decision = userInput.nextInt();
-				player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() + (board.get(decision-1).getPurchaseValue() / 2));
-				System.out.println("Decided to sell " + board.get(decision - 1).getPropertyName() + ". You now have " + player.get(0).getAmountOfMoney());
+				player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() + (board.get(decision-1).getPurchaseValue() / 2));
+				System.out.println("Decided to sell " + board.get(decision - 1).getPropertyName() + ". You now have " + player.get(p).getAmountOfMoney());
 				board.get(decision - 1).setOwnership("None");
-				player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - board.get(player.get(0).getPosition()).getStayValue());
-				System.out.println("You have paid the fee of " + board.get(player.get(0).getPosition()).getStayValue() + ". You now have " + player.get(0).getAmountOfMoney());
-				playGame2();
+				player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - board.get(player.get(p).getPosition()).getStayValue());
+				System.out.println("You have paid the fee of " + board.get(player.get(p).getPosition()).getStayValue() + ". You now have " + player.get(p).getAmountOfMoney());
+				
 				}
 			}
 		else 
 			{
-			player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getStayValue()));
-			System.out.println("You have paid the fee of " + (board.get(player.get(0).getPosition()).getStayValue()) + ". You now have " + player.get(0).getAmountOfMoney());
-			playGame2();
+			player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getStayValue()));
+			System.out.println("You have paid the fee of " + (board.get(player.get(p).getPosition()).getStayValue()) + ". You now have " + player.get(p).getAmountOfMoney());
+			
 			}
 		}
-	private static void taxThemAHoles1()
+	private static void taxThemAHoles1(int p, int b)
 		{
 		System.out.println("This is a tax! You'll have to pay " + board.get(player.get(0).getPosition()).getStayValue() + ". You have $" + player.get(0).getAmountOfMoney());
-		giveGov1();
+		giveGov1(p, b);
 		}
 	private static void propertyManagement1()
 		{
@@ -392,6 +413,15 @@ public class MonopolyRunner
 				}
 			}
 		}
+	private static int rollDice()
+	{
+		System.out.println("Press enter to roll your dice.");
+		Scanner temp = new Scanner (System.in);
+		String t = temp.nextLine();
+		int dice1 = (int) (Math.random() * 6) + 1;
+		int dice2 = (int) (Math.random() * 6) + 1;
+		return dice1+dice2;
+	}
 	private static void visitingJail1()
 		{
 		System.out.println("Just visiting my homie in jail. Nothing to see here...");
@@ -511,7 +541,7 @@ public class MonopolyRunner
 		}
 	private static void playGame2()
 		{
-		int dice = (int) (Math.random() * 6) + 1;
+		int dice = rollDice();
 		if (player.get(1).getPosition() + dice > 37)
 			{
 			player.get(1).setPosition((player.get(1).getPosition() + dice) - 37);
