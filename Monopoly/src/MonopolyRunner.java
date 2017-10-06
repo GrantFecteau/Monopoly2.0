@@ -252,31 +252,31 @@ public class MonopolyRunner
 		System.out.println("This is a tax! You'll have to pay " + board.get(player.get(0).getPosition()).getStayValue() + ". You have $" + player.get(0).getAmountOfMoney());
 		giveGov1(p, b);
 		}
-	private static void propertyManagement1()
+	private static void propertyManagement1(int p, int b)
 		{
-		if (board.get(player.get(0).getPosition()).getOwnership().equals("Player2"))
+		if (board.get(player.get(p).getPosition()).getOwnership().equals("Player2"))
 			{
-			System.out.println(board.get(player.get(0).getPosition()).getPropertyName() + " is owned by " + player.get(1).getName() + "!");
-			System.out.println("You will have to pay a fine of " + (board.get(player.get(0).getPosition()).getStayValue() + (board.get(player.get(0).getPosition()).getValueOfHotels() * board.get(player.get(0).getPosition()).getNumberOfHotels()) + (board.get(player.get(0).getPosition()).getValueOfHouses() * board.get(player.get(0).getPosition()).getNumberOfHouses())) + " to stay here.");
-			brokeAsCrap1();
+			System.out.println(board.get(player.get(p).getPosition()).getPropertyName() + " is owned by " + player.get(b).getName() + "!");
+			System.out.println("You will have to pay a fine of " + (board.get(player.get(p).getPosition()).getStayValue() + (board.get(player.get(p).getPosition()).getValueOfHotels() * board.get(player.get(p).getPosition()).getNumberOfHotels()) + (board.get(player.get(p).getPosition()).getValueOfHouses() * board.get(player.get(p).getPosition()).getNumberOfHouses())) + " to stay here.");
+			brokeAsCrap(p,b);
 			}
-		else if (board.get(player.get(0).getPosition()).getOwnership().equals("Player1"))
+		else if (board.get(player.get(p).getPosition()).getOwnership().equals("Player1"))
 			{
 			System.out.println("You own this property...you get to stay for free!!!");
-			if ((board.get(player.get(0).getPosition()).getNumberOfHotels() < 4 && board.get(player.get(0).getPosition()).getNumberOfHouses() == 4) && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHotels() / 2) >= 0)
+			if ((board.get(player.get(p).getPosition()).getNumberOfHotels() < 4 && board.get(player.get(p).getPosition()).getNumberOfHouses() == 4) && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHotels() / 2) >= 0)
 				{
-				System.out.println("You have the chance to upgrade to a hotel! Buy it for " + board.get(player.get(0).getPosition()).getValueOfHotels() / 2 + "? You currently have " + player.get(0).getAmountOfMoney() + ".");
+				System.out.println("You have the chance to upgrade to a hotel! Buy it for " + board.get(player.get(p).getPosition()).getValueOfHotels() / 2 + "? You currently have " + player.get(p).getAmountOfMoney() + ".");
 				System.out.println("1). yes");
 				System.out.println("2). no");
 				Scanner userInput = new Scanner (System.in);
 				int decision1 = userInput.nextInt();
-				if (decision1 == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHotels() / 2) >= 0)
+				if (decision1 == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHotels() / 2) >= 0)
 					{
-					board.get(player.get(0).getPosition()).setNumberOfHotels(board.get(player.get(0).getPosition()).getNumberOfHotels() + 1);
-					player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHotels() / 2));
-					System.out.println("You bought a hotel. You now have " + board.get(player.get(0).getPosition()).getNumberOfHotels() + " hotels and " + board.get(player.get(0).getPosition()).getNumberOfHouses() + " houses. You have " + player.get(0).getAmountOfMoney() + " in cash.");
+					board.get(player.get(p).getPosition()).setNumberOfHotels(board.get(player.get(p).getPosition()).getNumberOfHotels() + 1);
+					player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHotels() / 2));
+					System.out.println("You bought a hotel. You now have " + board.get(player.get(p).getPosition()).getNumberOfHotels() + " hotels and " + board.get(player.get(p).getPosition()).getNumberOfHouses() + " houses. You have " + player.get(p).getAmountOfMoney() + " in cash.");
 					}
-				else if (decision1 == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHotels() / 2) < 0)
+				else if (decision1 == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHotels() / 2) < 0)
 					{
 					System.out.println("Sorry, you don't have the money...");
 					}
@@ -285,20 +285,20 @@ public class MonopolyRunner
 					System.out.println("Ok, it's your money.");
 					}
 				}
-			else if (board.get(player.get(0).getPosition()).getNumberOfHouses() < 4 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHouses() / 2) >= 0)
+			else if (board.get(player.get(p).getPosition()).getNumberOfHouses() < 4 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHouses() / 2) >= 0)
 				{
-				System.out.println("You have the chance to upgrade to a house! Buy it for " + board.get(player.get(0).getPosition()).getValueOfHouses() / 2 + "? You currently have " + player.get(0).getAmountOfMoney() + ".");
+				System.out.println("You have the chance to upgrade to a house! Buy it for " + board.get(player.get(p).getPosition()).getValueOfHouses() / 2 + "? You currently have " + player.get(p).getAmountOfMoney() + ".");
 				System.out.println("1). yes");
 				System.out.println("2). no");
 				Scanner userInput = new Scanner (System.in);
 				int decision2 = userInput.nextInt();
-				if (decision2 == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHouses() / 2) >= 0)
+				if (decision2 == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHouses() / 2) >= 0)
 					{
-					board.get(player.get(0).getPosition()).setNumberOfHouses(board.get(player.get(0).getPosition()).getNumberOfHouses() + 1);
-					player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHouses() / 2));
-					System.out.println("You bought a house. You now have " + board.get(player.get(0).getPosition()).getNumberOfHouses() + " houses. You have " + player.get(0).getAmountOfMoney() + " in cash.");
+					board.get(player.get(p).getPosition()).setNumberOfHouses(board.get(player.get(p).getPosition()).getNumberOfHouses() + 1);
+					player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHouses() / 2));
+					System.out.println("You bought a house. You now have " + board.get(player.get(p).getPosition()).getNumberOfHouses() + " houses. You have " + player.get(p).getAmountOfMoney() + " in cash.");
 					}
-				else if (decision2 == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getValueOfHouses() / 2) < 0)
+				else if (decision2 == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getValueOfHouses() / 2) < 0)
 					{
 					System.out.println("Sorry, you don't have the money...");
 					}
@@ -311,19 +311,19 @@ public class MonopolyRunner
 			}
 		else 
 			{
-			System.out.println("This space is unowned. Would you like to buy it for " + board.get(player.get(0).getPosition()).getPurchaseValue() + "? You have $" + player.get(0).getAmountOfMoney());
+			System.out.println("This space is unowned. Would you like to buy it for " + board.get(player.get(p).getPosition()).getPurchaseValue() + "? You have $" + player.get(p).getAmountOfMoney());
 			System.out.println("1). yes");
 			System.out.println("2). no");
 			Scanner userInput = new Scanner (System.in);
 			int decision = userInput.nextInt();
-			if (decision == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getPurchaseValue()) >= 0)
+			if (decision == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getPurchaseValue()) >= 0)
 				{
-				board.get(player.get(0).getPosition()).setOwnership("Player1");
-				player.get(0).setAmountOfMoney(player.get(0).getAmountOfMoney() - board.get(player.get(0).getPosition()).getPurchaseValue());
-				System.out.println("You have purchased this property! You know have " + player.get(0).getAmountOfMoney() + " in cash.");
+				board.get(player.get(p).getPosition()).setOwnership("Player1");
+				player.get(p).setAmountOfMoney(player.get(p).getAmountOfMoney() - board.get(player.get(p).getPosition()).getPurchaseValue());
+				System.out.println("You have purchased this property! You know have " + player.get(p).getAmountOfMoney() + " in cash.");
 				playGame2();
 				}
-			else if (decision == 1 && player.get(0).getAmountOfMoney() - (board.get(player.get(0).getPosition()).getPurchaseValue()) < 0)
+			else if (decision == 1 && player.get(p).getAmountOfMoney() - (board.get(player.get(p).getPosition()).getPurchaseValue()) < 0)
 				{
 				System.out.println("Sorry, you don't have the cash...");
 				playGame2();
